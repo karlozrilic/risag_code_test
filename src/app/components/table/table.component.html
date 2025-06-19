@@ -1,6 +1,6 @@
 <p-table
     #dt
-    [value]="productsData.getProducts()"
+    [value]="productsData"
     [paginator]="true"
     [rows]="10"
     [tableStyle]="{ 'min-width': '50rem' }"
@@ -8,7 +8,9 @@
     [showCurrentPageReport]="true"
     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
     [filterDelay]="0"
-    [globalFilterFields]="['title', 'description', 'category', 'tags', 'brand']"
+    [globalFilterFields]="['title', 'description', 'category', 'tags', 'brand', 'sku']"
+    [loading]="loading"
+    [scrollable]="true"
 >
     <ng-template #caption>
         <div class="flex">
@@ -22,117 +24,122 @@
     </ng-template>
     <ng-template #header>
         <tr>
-            <th pSortableColumn="id">
+            <th pSortableColumn="id" style="width: 4%;">
                 <div class="flex gap-2">
                     <span>Id</span>
                     <p-sortIcon field="id" />
                 </div>
             </th>
-            <th pSortableColumn="title">
-                <div class="flex gap-2">
-                    <span>Title</span>
-                    <p-sortIcon field="title" />
-                </div>
-            </th>
-            <th pSortableColumn="description">
-                <div class="flex gap-2">
-                    <span>Description</span>
-                    <p-sortIcon field="description" />
-                </div>
-            </th>
-            <th pSortableColumn="category">
-                <div class="flex gap-2">
-                    <span>Category</span>
-                    <p-sortIcon field="category" />
-                </div>
-            </th>
-            <th pSortableColumn="price">
-                <div class="flex gap-2">
-                    <span>Price</span>
-                    <p-sortIcon field="price" />
-                </div>
-            </th>
-            <th pSortableColumn="discountPercentage">
-                <div class="flex gap-2">
-                    <span>Discount</span>
-                    <p-sortIcon field="discountPercentage" />
-                </div>
-            </th>
-            <th pSortableColumn="rating">
-                <div class="flex gap-2">
-                    <span>Rating</span>
-                    <p-sortIcon field="rating" />
-                </div>
-            </th>
-            <th pSortableColumn="stock">
-                <div class="flex gap-2">
-                    <span>Stock</span>
-                    <p-sortIcon field="stock" />
-                </div>
-            </th>
-            <th pSortableColumn="tags">
-                <div class="flex gap-2">
-                    <span>Tags</span>
-                    <p-sortIcon field="tags" />
-                </div>
-            </th>
-            <th pSortableColumn="brand">
-                <div class="flex gap-2">
-                    <span>Brand</span>
-                    <p-sortIcon field="brand" />
-                </div>
-            </th>
-            <th pSortableColumn="sku">
+            <th pSortableColumn="sku" style="width: 15%;">
                 <div class="flex gap-2">
                     <span>SKU</span>
                     <p-sortIcon field="sku" />
                 </div>
             </th>
-            <th pSortableColumn="weight">
+            <th pSortableColumn="title" style="width: 16%;">
                 <div class="flex gap-2">
-                    <span>Weight</span>
-                    <p-sortIcon field="weight" />
+                    <span>Title</span>
+                    <p-sortIcon field="title" />
                 </div>
             </th>
-            <th pSortableColumn="dimensions">
+            <th pSortableColumn="description" style="width: 24%; min-width: 350px;">
                 <div class="flex gap-2">
-                    <span>Dimensions</span>
-                    <p-sortIcon field="dimensions" />
+                    <span>Description</span>
+                    <p-sortIcon field="description" />
+                </div>
+            </th>
+            <th pSortableColumn="category" style="width: 5%;">
+                <div class="flex gap-2">
+                    <span>Category</span>
+                    <p-sortIcon field="category" />
+                </div>
+            </th>
+            <th pSortableColumn="price" style="width: 4%;">
+                <div class="flex gap-2">
+                    <span>Price</span>
+                    <p-sortIcon field="price" />
+                </div>
+            </th>
+            <th pSortableColumn="discountPercentage" style="width: 4%;">
+                <div class="flex gap-2">
+                    <span>Discount</span>
+                    <p-sortIcon field="discountPercentage" />
+                </div>
+            </th>
+            <th pSortableColumn="rating" style="width: 8%;">
+                <div class="flex gap-2">
+                    <span>Rating</span>
+                    <p-sortIcon field="rating" />
+                </div>
+            </th>
+            <th pSortableColumn="stock" style="width: 4%;">
+                <div class="flex gap-2">
+                    <span>Stock</span>
+                    <p-sortIcon field="stock" />
+                </div>
+            </th>
+            <th pSortableColumn="tags" style="width: 4%;">
+                <div class="flex gap-2">
+                    <span>Tags</span>
+                    <p-sortIcon field="tags" />
+                </div>
+            </th>
+            <th pSortableColumn="brand" style="width: 4%;">
+                <div class="flex gap-2">
+                    <span>Brand</span>
+                    <p-sortIcon field="brand" />
+                </div>
+            </th>
+            <th pSortableColumn="availabilityStatus">
+                <div class="flex gap-2" style="width: 8%;">
+                    <span>Availability</span>
+                    <p-sortIcon field="availabilityStatus" />
                 </div>
             </th>
         </tr>
     </ng-template>
     <ng-template #body let-product>
         <tr>
-            <td>{{ product.id }}</td>
-            <td>{{ product.title }}</td>
-            <td>{{ product.description }}</td>
-            <td>{{ product.category }}</td>
-            <td>{{ product.price }}</td>
-            <td>{{ product.discountPercentage }}%</td>
-            <td>
-                <div class="flex gap-2">
-                    <p-rating 
-                        [(ngModel)]="product.rating" 
-                        [readonly]="true" 
-                    >
-                        <ng-template #cancelicon></ng-template>
-                        <ng-template #onicon><span class="pi pi-star" style="color:gold"></span></ng-template>
-                        <ng-template #officon><span class="pi pi-star" style="color:lightgray"></span></ng-template>
-                    </p-rating>
-                    <div>({{ product.rating }})</div>
-                </div>
-            </td>
-            <td>{{ product.stock }}</td>
-            <td>{{ product.tags.join(', ') }}</td>
-            <td>{{ product.brand }}</td>
-            <td>{{ product.sku }}</td>
-            <td>{{ product.weight }}</td>
-            <td>
-                Width: {{ product.dimensions.width }}
-                Height: {{ product.dimensions.height }}
-                Depth: {{ product.dimensions.depth }}
-            </td>
+            @if (loading) {
+                <td>loading...</td>
+            } @else {
+                <td>{{ product.id }}</td>
+                <td>{{ product.sku }}</td>
+                <td>
+                    <div class="flex items-center gap-2">
+                        <img [alt]="product.title" src="{{ product.thumbnail }}" width="32" />
+                        <span>{{ product.title }}</span>
+                    </div>
+                </td>
+                <td>{{ product.description }}</td>
+                <td>{{ product.category }}</td>
+                <td>{{ product.price }}€</td>
+                <td>{{ product.discountPercentage }}%</td>
+                <td>
+                    <div class="flex flex-column align-items-center gap-2">
+                        <p-rating 
+                            [(ngModel)]="product.rating" 
+                            [readonly]="true" 
+                        >
+                            <ng-template #cancelicon></ng-template>
+                            <ng-template #onicon><span class="pi pi-star" style="color:gold"></span></ng-template>
+                            <ng-template #officon><span class="pi pi-star" style="color:lightgray"></span></ng-template>
+                        </p-rating>
+                        <div>({{ product.rating }})</div>
+                    </div>
+                </td>
+                <td>{{ product.stock }}</td>
+                <td>{{ product.tags.join(', ') }}</td>
+                <td>{{ product.brand }}</td>
+                <td>
+                    <p-tag [value]="product.availabilityStatus" [severity]="getAvailability(product.availabilityStatus)" />
+                </td>
+            }
+        </tr>
+    </ng-template>
+    <ng-template #emptymessage>
+        <tr>
+            <td colspan="12" class="text-center">No products found.</td>
         </tr>
     </ng-template>
 </p-table>
