@@ -24,7 +24,6 @@ export class TableComponent {
     @Input() productsData!: Product[];
     @Input() loading : boolean = true;
     @ViewChild('dt') dt!: Table;
-    searchValue: string | undefined;
 
     getAvailability(status: string) {
         switch (status.toLowerCase()) {

@@ -1,6 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
 /* Order */
-@import 'primeflex/primeflex.css';
+
+// @import "primeflex/primeflex.css";
+@use "tailwindcss";
+
+*, html {
+    color-scheme: light;
+}
 
 * {
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
